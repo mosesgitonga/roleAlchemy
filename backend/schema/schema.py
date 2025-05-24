@@ -21,7 +21,7 @@ users = Table(
     Column("is_active", Boolean, default=False),
     Column("plan", String, default="free"),
     Column("created_at", DateTime, default=datetime.utcnow)
-    column("role", String, default="jobSeeker")
+    Column("role", String, default="jobSeeker")
 )
 
 
