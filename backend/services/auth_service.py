@@ -2,6 +2,7 @@ import requests
 from fastapi import HTTPException
 from sqlalchemy import insert, select
 from uuid import uuid4
+import re
 from utils.helper import Helper
 from utils.logger import logger
 from schema.schema import users, engine
@@ -17,10 +18,28 @@ class AuthService:
         query = select(users).where(users.c.email == email)
         result = conn.execute(query).first()
         return result is not None 
+    
+    @staticmethod
+    def is_strong_password(password: str) -> bool:
+        if len(password) < 8:
+            return False
+        if not re.search(r"[A-Z]", password):   # uppercase letter
+            return False
+        if not re.search(r"[a-z]", password):   # lowercase letter
+            return False
+        if not re.search(r"\d", password):      # digit
+            return False
+        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):  # special char 
+            return False
+        return True
 
     def register(self, data: dict[str, str]) -> dict[str, str]:
         email = data.get("email")
         password = data.get("password")
+
+        #ensure password is strong
+        if not self.is_strong_password(password):
+            raise HTTPException(status_code=400, detail="Password is not strong.")
 
         if not email or not password:
             logger.warning("Email and password are required")
@@ -60,6 +79,5 @@ class AuthService:
                 }
         except Exception as e:
             logger.error("Error during Registration: ", exc_info=True)
-
-
+            raise HTTPException(status_code=500, detail="Internal Server Error")
 
