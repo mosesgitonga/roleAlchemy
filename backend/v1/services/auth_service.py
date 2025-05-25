@@ -67,17 +67,17 @@ class AuthService:
                 conn.commit()
 
                 access_token = self.helper.generate_jwt_token(user_id, user_role)
-
                 logger.info(f"User {email} registered successfully with id {user_id}")
 
                 return {
                     "access_token": access_token,
-                    "token_type": "bearer",
                     "user_id": user_id,
-                    "email": email,
                     "role": user_role
                 }
         except Exception as e:
             logger.error("Error during Registration: ", exc_info=True)
             raise HTTPException(status_code=500, detail="Internal Server Error")
 
+
+    def login():
+        pass 
