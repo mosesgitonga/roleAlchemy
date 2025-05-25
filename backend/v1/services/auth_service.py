@@ -15,9 +15,13 @@ class AuthService:
     
     @staticmethod
     def user_exists(conn, email: str) -> bool:
-        query = select(users).where(users.c.email == email)
-        result = conn.execute(query).first()
-        return result is not None 
+        try:
+            query = select(users).where(users.c.email == email)
+            result = conn.execute(query).first()
+            return result is not None 
+        except Exception as e:
+            logger.warning("Unable to check if user exists: ", e)
+            raise HTTPException(status_code=500, detail="Internal Server Error")
     
     @staticmethod
     def is_strong_password(password: str) -> bool:
@@ -39,6 +43,7 @@ class AuthService:
 
         #ensure password is strong
         if not self.is_strong_password(password):
+            logger.warning("Password is not strong")
             raise HTTPException(status_code=400, detail="Password is not strong.")
 
         if not email or not password:
@@ -52,7 +57,7 @@ class AuthService:
         try:
             with self.engine.connect() as conn:
                 if self.user_exists(conn, email):
-                    logger.warning("Attempt to register an existing email")
+                    logger.warning("Failure: Attempt to register an existing email")
                     raise HTTPException(status_code=400, detail="User already exists")
                     
                 conn.execute(
@@ -71,13 +76,41 @@ class AuthService:
 
                 return {
                     "access_token": access_token,
-                    "user_id": user_id,
-                    "role": user_role
                 }
         except Exception as e:
             logger.error("Error during Registration: ", exc_info=True)
             raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-    def login():
-        pass 
+    def login(data: dict[str, str]) -> dict[str, str | int]:
+        email = data.get('email')
+        password = data.get('password')
+
+        if not email or not password:
+            logger.warning("Email or password is missing")
+            raise HTTPException(status_code=400, detail="Email or Password is missing")
+
+        try:
+            with self.engine.connect() as conn:
+                existing_user = self.user_exists(conn, email)
+                if not existing_user:
+                    logger.debug("Invalid Email")
+                    raise HTTPException(status_code=404, detail="Invalid Email or Password")
+
+                hashed_password = existing_user.password
+                result = self.helper.is_correct_password(hashed_password, password)
+                if result is False:
+                    logger.info("Invalid password")
+                    raise HTTPException(status_code=404, detail="Invalid Email or Password")
+                
+                access_token = self.helper.generate_jwt_token(existing_user.id, existing_user.role)
+                if not access_token:
+                    logger.error("access token was not generated")
+                    raise HTTPException(status_code=400, detail="An Error Occured")
+
+                return { "access_token": access_token } 
+        except Exception as e:
+            logger.error("Error Logging in: ", e)
+            raise HTTPException(status_code=500, detail="Internal Server Error")
+
+        

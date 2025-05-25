@@ -15,6 +15,14 @@ class Helper:
         return hashed.decode('utf-8')
 
     @staticmethod
+    def is_correct_password(hashed_password: str, password: str) -> bool:
+        """
+        checks if the password matches the hashed password
+        """
+        return bcrypt.check_password(hashed_password, password)
+        
+
+    @staticmethod
     def generate_jwt_token(user_id: str, role: str, expires_in: int = 3600 * 4) -> str:
         """
         Generate a JWT token with user_id and role, expiring in `expires_in` seconds (default  4 hour).
