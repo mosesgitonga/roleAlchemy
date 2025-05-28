@@ -66,6 +66,7 @@ experience = Table(
     Column("description", Text)
 )
 
+
 education = Table(
     "education",
     metadata,
