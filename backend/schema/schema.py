@@ -10,18 +10,15 @@ from utils.logger import logger
 load_dotenv()
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
-SCHEMA_NAME = 'public'  
+SCHEMA_NAME = 'public'
 
 logger.debug(f"Database URL: {DATABASE_URL}")
 logger.debug(f"Using schema: {SCHEMA_NAME}")
 
-# Create metadata with schema set explicitly
 metadata = MetaData(schema=SCHEMA_NAME)
-
-# Create the engine WITHOUT SQLite-specific connect_args
 engine = create_engine(DATABASE_URL)
 
-# Define tables with no schema specified here (handled by MetaData)
+# Users Table
 users = Table(
     "users",
     metadata,
@@ -43,14 +40,62 @@ profiles = Table(
     Column("linkedin", String),
     Column("github", String),
     Column("phone", String),
-    Column("skills", Text),
-    Column("experience", Text),
-    Column("education", Text),
-    Column("achievements", Text),
-    Column("certifications", Text),
-    Column("country", Text),
-    Column("city", Text),
+    Column("country", String),
+    Column("city", String),
     Column("updated_at", DateTime, default=datetime.utcnow)
+)
+
+skills = Table(
+    "skills",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id")),
+    Column("skill_name", String, nullable=False)
+)
+
+experience = Table(
+    "experience",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id")),
+    Column("title", String),
+    Column("Position", String),
+    Column("company", String),
+    Column("start_date", DateTime),
+    Column("end_date", DateTime),
+    Column("description", Text)
+)
+
+education = Table(
+    "education",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id")),
+    Column("institution", String),
+    Column("certificate_level", String), # certificate, diploma, degree, masters, phd
+    Column("start_year", Integer),
+    Column("end_year", Integer)
+)
+
+certifications = Table(
+    "certifications",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id")),
+    Column("title", String),
+    Column("issuer", String),
+    Column("issue_date", DateTime),
+    Column("expiration_date", DateTime)
+)
+
+achievements = Table(
+    "achievements",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id")),
+    Column("title", String),
+    Column("description", Text),
+    Column("achieved_at", DateTime)
 )
 
 payments = Table(
@@ -65,5 +110,4 @@ payments = Table(
     Column("expires_at", DateTime)
 )
 
-# Create tables in the specified schema
 metadata.create_all(engine)

@@ -8,5 +8,4 @@ app = FastAPI()
 def read_root():
     return {"message": "Welcome to cvForge"}
 
-
 app.include_router(auth.router)
