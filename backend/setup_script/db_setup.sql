@@ -1,4 +1,4 @@
--- Create the database
+-- Create the development database
 CREATE DATABASE cvForge_developer_db;
 
 -- Create the user with a password

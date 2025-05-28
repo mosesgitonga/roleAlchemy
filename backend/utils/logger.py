@@ -8,7 +8,7 @@ load_dotenv()
 ENV = os.getenv("ENVIRONMENT", "production").lower()
 
 # Create logger
-logger = logging.getLogger("loveefy")
+logger = logging.getLogger("cvForge")
 logger.setLevel(logging.DEBUG if ENV == "development" else logging.INFO)
 
 # Formatter
@@ -22,7 +22,6 @@ console_handler = logging.StreamHandler()
 console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 
-# Optional: File handler (for prod)
 if ENV != "development":
     file_handler = logging.FileHandler("logs/app.log")
     file_handler.setFormatter(formatter)

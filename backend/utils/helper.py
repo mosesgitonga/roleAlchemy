@@ -1,7 +1,9 @@
 import bcrypt
+import os
+from datetime import datetime, timedelta
+import jwt
 
 class Helper:
-    _SALT_ROUNDS = 13
     @staticmethod
     def hash_data(data: str) -> str:
         """
@@ -10,16 +12,13 @@ class Helper:
         if not data:
             raise ValueError("Nothing to hash")
 
-        salt = bcrypt.gensalt(_SALT_ROUNDS)
+        salt = bcrypt.gensalt(13)
         hashed = bcrypt.hashpw(data.encode('utf-8'), salt)
         return hashed.decode('utf-8')
 
     @staticmethod
-    def is_correct_password(hashed_password: str, password: str) -> bool:
-        """
-        checks if the password matches the hashed password
-        """
-        return bcrypt.check_password(hashed_password, password)
+    def is_correct_password(hashed_password: str, plain_password: str) -> bool:
+        return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
         
 
     @staticmethod
