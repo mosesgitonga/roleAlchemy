@@ -1,8 +1,10 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends 
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import insert, select
 from sqlalchemy.orm import Session
 from uuid import uuid4
 import re
+
 from utils.helper import Helper
 from utils.logger import logger
 from schema.schema import users, engine
@@ -119,6 +121,45 @@ class AuthService:
                     raise HTTPException(status_code=500, detail="Token generation failed")
 
                 return {"access_token": access_token}
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Error Logging in: {e}", exc_info=True)
+            raise HTTPException(status_code=500, detail="Internal Server Error")
+
+    def token(self, form_data: OAuth2PasswordRequestForm = Depends()) -> dict[str, str]:
+        email = form_data.username
+        password = form_data.password
+
+        if not email or not password:
+            logger.warning("Email or password is missing")
+            raise HTTPException(status_code=400, detail="Email or Password is missing")
+
+        if not self.is_valid_email(email):
+            logger.warning("Invalid email format")
+            raise HTTPException(status_code=400, detail="Invalid email format")
+
+        try:
+            with Session(self.engine) as session:
+                existing_user = self.user_exists_by_email(session, email)
+                if not existing_user:
+                    logger.debug("Invalid Email")
+                    raise HTTPException(status_code=404, detail="Invalid Email or Password")
+
+                hashed_password = existing_user['password_hash']
+                if not self.helper.is_correct_password(hashed_password, password):
+                    logger.info("Invalid password")
+                    raise HTTPException(status_code=404, detail="Invalid Email or Password")
+
+                access_token = self.helper.generate_jwt_token(existing_user['id'], existing_user['role'])
+                if not access_token:
+                    logger.error("Access token was not generated")
+                    raise HTTPException(status_code=500, detail="Token generation failed")
+
+                return {
+                    "access_token": access_token,
+                    "token_type": "bearer"  
+                }
         except HTTPException:
             raise
         except Exception as e:

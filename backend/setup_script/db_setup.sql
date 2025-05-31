@@ -1,5 +1,5 @@
 -- Create the development database
-CREATE DATABASE cvForge_developer_db;
+CREATE DATABASE roleAlchemy_developer_db;
 
 -- Create the user with a password
 DO
@@ -15,4 +15,4 @@ END
 $$;
 
 -- Grant privileges on the database to the user
-GRANT ALL PRIVILEGES ON DATABASE cvForge_developer_db TO dev;
+GRANT ALL PRIVILEGES ON DATABASE roleAlchemy_developer_db TO dev;

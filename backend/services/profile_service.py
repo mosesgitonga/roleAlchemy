@@ -13,7 +13,7 @@ class Profile:
         self.helper = helper
         self.engine = engine
 
-    def create(self, data):
+    def create(self, data: [str, str], user_id):
         """Create a new profile for a user."""
         full_name = data.get('full_name')
         linkedin = data.get('linkedin')
@@ -22,7 +22,6 @@ class Profile:
         phone = data.get('phone')
         country = data.get('country')
         city = data.get('city')
-        user_id = data.get('user_id')  # Required foreign key
         skills_list = data.get('skills', [])
         experiences = data.get('experience', [])
         educations = data.get('education', [])
@@ -42,6 +41,13 @@ class Profile:
             if not user_exists:
                 logger.error(f"User with id {user_id} not found")
                 raise HTTPException(status_code=404, detail="User not found")
+                
+            profile_exists = conn.execute(
+                select(profiles.c.id).where(profiles.c.user_id == user_id)
+            ).fetchone()
+            if profile_exists:
+                logger.error("Profile Already Exists")
+                raise HTTPException(status_code=409, detail="Profile Already Exists")
 
         # Validate optional fields
         if linkedin and not self._is_valid_url(linkedin):

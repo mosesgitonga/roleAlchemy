@@ -5,6 +5,7 @@ from utils.helper import Helper
 from schema.schema import engine
 from services.auth_service import AuthService
 from schema.auth import RegisterRequest, LoginRequest
+from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter(
     prefix="/auth",
@@ -22,4 +23,10 @@ def register_user(data: RegisterRequest, auth_service: AuthService = Depends(get
 @router.post("/login")
 def login_user(data: LoginRequest, auth_service: AuthService = Depends(get_auth_service)):
     return auth_service.login(data.dict())
+
+@router.post("/token")
+def token(auth_service: AuthService = Depends(get_auth_service), form_data: OAuth2PasswordRequestForm = Depends()):
+    return auth_service.token(form_data)
+
+
 

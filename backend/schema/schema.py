@@ -39,6 +39,7 @@ profiles = Table(
     Column("full_name", String),
     Column("linkedin", String),
     Column("github", String),
+    Column("website", String),
     Column("phone", String),
     Column("country", String),
     Column("city", String),
