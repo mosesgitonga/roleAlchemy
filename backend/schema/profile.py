@@ -1,25 +1,9 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import Optional, List
+from typing import Optional, List, Union, Dict, Any
 from datetime import datetime
 from uuid import UUID
 
-class ProfileCreate(BaseModel):
-    user_id: str
-    full_name: Optional[str] = None
-    linkedin: Optional[str] = None
-    github: Optional[str] = None
-    website: Optional[str] = None
-    phone: Optional[str] = None
-    country: Optional[str] = None
-    city: Optional[str] = None 
-    skills: Optional[List[str]] = [] 
-    experience: Optional[List[dict]] = []  # Dict with title, Position, company, start_date, end_date, description
-    education: Optional[List[dict]] = []   # Dict with institution, certificate_level, start_year, end_year
-    certifications: Optional[List[dict]] = []  # Dict with title, issuer, issue_date, expiration_date
-    achievements: Optional[List[dict]] = []  # Dict with title, description, achieved_at
 
-class SkillCreate(BaseModel):
-    skill_name: str
 
 class ExperienceCreate(BaseModel):
     title: Optional[str] = None
@@ -28,6 +12,7 @@ class ExperienceCreate(BaseModel):
     start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None
     description: Optional[str] = None
+
 
 class EducationCreate(BaseModel):
     institution: Optional[str] = None
@@ -86,4 +71,18 @@ class AchievementUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     achieved_at: Optional[datetime] = None 
-    
+class ProfileCreate(BaseModel):
+    user_id: str
+    full_name: Optional[str] = None
+    linkedin: Optional[str] = None
+    github: Optional[str] = None
+    website: Optional[str] = None
+    phone: Optional[str] = None
+    country: Optional[str] = None
+    city: Optional[str] = None
+    projects: Optional[List[Dict[str, Any]]] = Field(default_factory=list)
+    skills: Optional[List[str]] = Field(default_factory=list)
+    experience: List[ExperienceCreate] = Field(default_factory=list)
+    education: List[EducationCreate] = Field(default_factory=list)
+    certifications: List[CertificationCreate] = Field(default_factory=list)
+    achievements: List[AchievementCreate] = Field(default_factory=list)

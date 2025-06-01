@@ -1,6 +1,6 @@
 from sqlalchemy import (
     create_engine, MetaData, Table, Column,
-    Integer, String, Text, DateTime, ForeignKey, Boolean, Float
+    Integer, String, Text, DateTime, ForeignKey, Boolean, Float,JSON
 )
 from datetime import datetime
 from dotenv import load_dotenv
@@ -46,21 +46,30 @@ profiles = Table(
     Column("updated_at", DateTime, default=datetime.utcnow)
 )
 
+projects = Table(
+    "projects", metadata,
+    Column("id", String, primary_key=True),
+    Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id", ondelete="CASCADE"), nullable=False),    Column("title",String, nullable=False),
+    Column("description", String, nullable=True),
+    Column("link", String, nullable=True),
+
+)
+
 skills = Table(
     "skills",
     metadata,
-    Column("id", Integer, primary_key=True),
+    Column("id", String, primary_key=True),
     Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id")),
-    Column("skill_name", String, nullable=False)
+    Column("skill_name", String, nullable=False),
 )
 
 experience = Table(
     "experience",
     metadata,
-    Column("id", Integer, primary_key=True),
+    Column("id", String, primary_key=True),
     Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id")),
     Column("title", String),
-    Column("Position", String),
+    Column("position", String),
     Column("company", String),
     Column("start_date", DateTime),
     Column("end_date", DateTime),
@@ -71,7 +80,7 @@ experience = Table(
 education = Table(
     "education",
     metadata,
-    Column("id", Integer, primary_key=True),
+    Column("id", String, primary_key=True),
     Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id")),
     Column("institution", String),
     Column("certificate_level", String), # certificate, diploma, degree, masters, phd
@@ -82,7 +91,7 @@ education = Table(
 certifications = Table(
     "certifications",
     metadata,
-    Column("id", Integer, primary_key=True),
+    Column("id", String, primary_key=True),
     Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id")),
     Column("title", String),
     Column("issuer", String),
@@ -93,7 +102,7 @@ certifications = Table(
 achievements = Table(
     "achievements",
     metadata,
-    Column("id", Integer, primary_key=True),
+    Column("id", String, primary_key=True),
     Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id")),
     Column("title", String),
     Column("description", Text),

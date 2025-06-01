@@ -3,6 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import insert, select
 from sqlalchemy.orm import Session
 from uuid import uuid4
+import uuid
 import re
 
 from utils.helper import Helper

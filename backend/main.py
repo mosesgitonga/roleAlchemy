@@ -7,7 +7,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to  root endpoint."}
+    return {"message": "Welcome to role Alchemy."}
 
 app.include_router(auth.router)
 app.include_router(profile.profileRouter)

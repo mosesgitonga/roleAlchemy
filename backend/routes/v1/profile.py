@@ -49,7 +49,7 @@ async def create_skill(profile_id: str, data: SkillCreate, profile_service: Prof
     return profile_service.create_skill(profile_id, data.skill_name)
 
 @profileRouter.put("/{profile_id}/skills/{skill_id}", response_model=dict, status_code=HTTP_200_OK)
-async def update_skill(profile_id: str, skill_id: int, data: SkillUpdate, profile_service: Profile = Depends(get_profile_service)):
+async def update_skill(profile_id: str, skill_id: str, data: SkillUpdate, profile_service: Profile = Depends(get_profile_service)):
     """Update a specific skill by skill_id."""
     return profile_service.update_skill(skill_id, profile_id, data.skill_name)
 
