@@ -116,9 +116,27 @@ payments = Table(
     Column("user_id", String, ForeignKey(f"{SCHEMA_NAME}.users.id")),
     Column("amount", Float),
     Column("currency", String, default="Kes"),
-    Column("plan_type", String),
     Column("payment_date", DateTime, default=datetime.utcnow),
-    Column("expires_at", DateTime)
+    Column("metadata", JSON),
+    Column("method", String, nullable=True),
+    Column("transaction_ref", String, nullable=True)
+)
+
+subscriptions = Table(
+    "subs", metadata,
+    Column("id", String, primary_key=True),
+    Column("user_id", String, ForeignKey(f"{SCHEMA_NAME}.users.id")),
+    Column("payments_id", String, ForeignKey(f"{SCHEMA_NAME}.payments.id")),
+    Column("plan_type", String, nullable=False),
+    Column("start_date", DateTime),
+    Column("expiry_date", DateTime)
+)
+
+resume_generations = Table(
+    "resume_generations", metadata,
+    Column("id", String, primary_key=True),
+    Column("user_id", String, ForeignKey(f"{SCHEMA_NAME}.users.id"), nullable=False),
+    Column("generated_at", DateTime, default=datetime.utcnow),
 )
 
 metadata.create_all(engine)
