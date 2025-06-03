@@ -1,6 +1,16 @@
 import httpx
 import os
 
+
+PRICING = {
+    "KES": {"daily": 100, "weekly": 500, "monthly": 1000},
+    "USD": {"daily": 1, "weekly": 4, "monthly": 8},
+    "JPY": {"daily": 150, "weekly": 750, "monthly": 1500},
+}
+
+CURRENCIES_NO_MULTIPLY = {"JPY", "KRW", "CLP"}
+
+
 class Paystack:
     def __init__(self):
         self.PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY")
@@ -10,22 +20,32 @@ class Paystack:
         }
         self.base_url = "https://api.paystack.co"
 
-    async def initialize_transaction(self, email: str, amount: int, callback_url: str):
-        """
-        Initialize a Paystack transaction for Card and Mobile Money (Mpesa)
-        amount should be in the smallest currency unit (kobo for KES).
-        """
+    def get_amount(self, plan: str, currency: str) -> int:
+        currency = currency.upper()
+        plan = plan.lower()
+
+        if currency not in PRICING or plan not in PRICING[currency]:
+            raise ValueError("Invalid plan or unsupported currency")
+
+        amount = PRICING[currency][plan]
+        return amount if currency in CURRENCIES_NO_MULTIPLY else amount * 100
+
+    async def initialize_transaction(self, email: str, plan: str, currency: str, callback_url: str):
         url = f"{self.base_url}/transaction/initialize"
+        amount = self.get_amount(plan, currency)
+
         data = {
             "email": email,
             "amount": amount,
             "callback_url": callback_url,
-            "channels": ["card", "mobile_money"]
+            "channels": ["card", "mobile_money"],
+            "currency": currency.upper()
         }
 
         async with httpx.AsyncClient() as client:
             response = await client.post(url, json=data, headers=self.headers)
-            response.raise_for_status()  
+            response.raise_for_status()
+            # print(response.json())
             return response.json()
 
     async def verify_transaction(self, reference: str):
