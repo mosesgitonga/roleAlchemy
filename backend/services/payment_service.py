@@ -1,13 +1,13 @@
 import httpx
 import os
 
-
 PRICING = {
-    "KES": {"daily": 100, "weekly": 500, "monthly": 1000},
-    "USD": {"daily": 1, "weekly": 4, "monthly": 8},
-    "JPY": {"daily": 150, "weekly": 750, "monthly": 1500},
+    "KES": {"daily": 100, "weekly": 500, "monthly": 1500},   
+    "NGN": {"daily": 200, "weekly": 1000, "monthly": 2000},  
+    "GHS": {"daily": 2, "weekly": 10, "monthly": 20},      
+    "ZAR": {"daily": 5, "weekly": 25, "monthly": 50},       
+    "USD": {"daily": 1, "weekly": 4, "monthly": 8}           
 }
-
 CURRENCIES_NO_MULTIPLY = {"JPY", "KRW", "CLP"}
 
 
@@ -41,11 +41,10 @@ class Paystack:
             "channels": ["card", "mobile_money"],
             "currency": currency.upper()
         }
-
         async with httpx.AsyncClient() as client:
             response = await client.post(url, json=data, headers=self.headers)
             response.raise_for_status()
-            # print(response.json())
+            print(response.json())
             return response.json()
 
     async def verify_transaction(self, reference: str):

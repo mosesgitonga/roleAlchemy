@@ -1,9 +1,13 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt  # ✅ Use only this
+from jose import JWTError, jwt  
 import bcrypt
 import os
 from datetime import datetime, timedelta
+from sqlalchemy import insert
+import uuid
+from schema.schema import engine, users, payments, subscriptions
+
 
 class Helper:
     def __init__(self):
@@ -43,4 +47,33 @@ class Helper:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid authentication credentials",
+            )
+
+    def activate_subscription(self, user_id: str, plan_type: str, payments_id: str):
+        """
+        Activates a user's subscription by inserting a record into the subscriptions table.
+        """
+        # Set duration based on plan
+        start_date = datetime.utcnow()
+
+        if plan_type == "daily":
+            expiry_date = start_date + timedelta(days=1)
+        elif plan_type == "weekly":
+            expiry_date = start_date + timedelta(weeks=1)
+        elif plan_type == "monthly":
+            expiry_date = start_date + timedelta(days=30)
+        else:
+            raise ValueError("Invalid plan type for activation")
+
+        with engine.begin() as conn:
+            conn.execute(
+                insert(subscriptions),
+                {
+                    "id": str(uuid.uuid4()),
+                    "user_id": user_id,
+                    "payments_id": payments_id,
+                    "plan_type": plan_type,
+                    "start_date": start_date,
+                    "expiry_date": expiry_date
+                }
             )

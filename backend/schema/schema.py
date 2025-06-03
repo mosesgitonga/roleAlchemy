@@ -119,7 +119,8 @@ payments = Table(
     Column("payment_date", DateTime, default=datetime.utcnow),
     Column("metadata", JSON),
     Column("method", String, nullable=True),
-    Column("transaction_ref", String, nullable=True)
+    Column("transaction_ref", String, nullable=True),
+    Column("plan", String)
 )
 
 subscriptions = Table(
