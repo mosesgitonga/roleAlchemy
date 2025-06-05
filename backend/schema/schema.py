@@ -27,6 +27,7 @@ users = Table(
     Column("password_hash", String, nullable=False),
     Column("is_active", Boolean, default=False),
     Column("plan", String, default="free"),
+    Column("is_email_verified", Boolean, default=False),
     Column("created_at", DateTime, default=datetime.utcnow),
     Column("role", String, default="jobSeeker")
 )

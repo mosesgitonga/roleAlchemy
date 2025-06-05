@@ -82,6 +82,7 @@ async def initiate_payment(
     except Exception as e:
         logger.exception("Failed to initiate payment")
         raise HTTPException(status_code=500, detail="Payment initialization failed")
+
 @paymentRoute.get("/callback")
 async def payment_callback(request: Request):
     """

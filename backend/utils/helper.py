@@ -1,17 +1,22 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Request 
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt  
 import bcrypt
 import os
 from datetime import datetime, timedelta
-from sqlalchemy import insert
+from sqlalchemy import insert, select
 import uuid
+from functools import wraps
 from schema.schema import engine, users, payments, subscriptions
+from starlette.status import HTTP_403_FORBIDDEN 
+from sqlalchemy.orm import Session
+
 
 
 class Helper:
     def __init__(self):
         self.oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+        self.engine = engine
 
     @staticmethod
     def hash_data(data: str) -> str:
@@ -26,11 +31,12 @@ class Helper:
         return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
     @staticmethod
-    def generate_jwt_token(user_id: str, role: str, expires_in: int = 3600 * 4) -> str:
+    def generate_jwt_token(user_id: str, role: str, is_email_verified: bool, expires_in: int = 3600 * 4) -> str:
         secret_key = os.getenv("JWT_SECRET", "super-secret-key")
         payload = {
             "user_id": user_id,
             "role": role,
+            "is_email_verified": is_email_verified,
             "exp": datetime.utcnow() + timedelta(seconds=expires_in)
         }
         return jwt.encode(payload, secret_key, algorithm="HS256")
@@ -77,3 +83,38 @@ class Helper:
                     "expiry_date": expiry_date
                 }
             )
+
+    def is_email_verified(self, session: Session, email: str) -> bool:
+        user = session.execute(select(users).where(users.c.email == email)).fetchone()
+        if not user:
+            raise HTTPException(status_code=404, detail="Email not found")
+        return user.is_email_verified is True
+
+def email_verified_required(helper_instance: Helper):
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            request: Request = kwargs.get("request") or next(
+                (arg for arg in args if isinstance(arg, Request)), None
+            )
+
+            if not request:
+                raise RuntimeError("Request object not found")
+
+            user_id = helper_instance.get_current_user_id(request)
+
+            with helper_instance.engine.connect() as conn:
+                result = conn.execute(select(users).where(users.c.id == user_id)).fetchone()
+
+                if not result:
+                    raise HTTPException(status_code=404, detail="User not found")
+
+                if not result["is_email_verified"]:
+                    raise HTTPException(
+                        status_code=HTTP_403_FORBIDDEN,
+                        detail="Email not verified. Please verify your email to continue."
+                    )
+
+            return await func(*args, **kwargs)
+        return wrapper
+    return decorator

@@ -10,3 +10,13 @@ class LoginRequest(BaseModel):
 
 class AuthResponse(BaseModel):
     access_token: str 
+class SendOtpRequest(BaseModel):
+    email: EmailStr
+
+class verifyEmailRequest(BaseModel):
+    otp: str
+
+class forgotPasswordRequest(BaseModel):
+    otp: str
+    email: EmailStr
+    new_password: str
