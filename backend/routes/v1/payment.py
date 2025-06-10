@@ -86,7 +86,7 @@ async def initiate_payment(
 @paymentRoute.get("/callback")
 async def payment_callback(request: Request):
     """
-    This is for front-end redirection post-payment. Not reliable for activation.
+    This is for front-end redirection post-payment.
     """
     reference = request.query_params.get("reference")
     if not reference:

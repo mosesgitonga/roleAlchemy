@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  background-color: #ffffff;
+}
+
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.register-card {
+  background: #fff;
+  padding: 2rem 2.5rem;
+  max-width: 420px;
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+}
+
+.register-card h2 {
+  color: #e63946;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.register-form label {
+  font-size: 0.9rem;
+  color: #1d3557;
+  display: flex;
+  flex-direction: column;
+}
+
+.register-form input {
+  padding: 0.75rem;
+  margin-top: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s ease;
+}
+
+.register-form input:focus {
+  outline: none;
+  border-color: #1d3557;
+  box-shadow: 0 0 0 2px rgba(29, 53, 87, 0.1);
+}
+
+.register-form button {
+  margin-top: 1rem;
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #e63946;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.register-form button:hover {
+  background-color: #d62839;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.login-link a {
+  color: #1d3557;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+.success-message {
+  color: #2e7d32;
+  background-color: #e8f5e9;
+  border: 1px solid #2e7d32;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.error-message {
+  color:#d62839;
+  background-color: #ccc;
+  border-radius: 6px;
+  padding: 0.3px;
+  border: 1px solid red;
+}
+
+.password-field {
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  flex: 1;
+}
+
+.toggle-btn {
+  margin-left: 8px;
+  background: none;
+  border: none;
+  color: blue;
+  cursor: pointer;
+  font-size: 0.9em;
+  width: 20%;
+}

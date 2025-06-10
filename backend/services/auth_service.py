@@ -59,13 +59,13 @@ class AuthService:
             logger.warning(f"Unable to check if user exists: {e}")
             raise HTTPException(status_code=500, detail="Internal Server Error")
 
-    def create_user(self, session: Session, email: str, hashed_password: str, role: str = "jobSeeker") -> str:
+    def create_user(self, session: Session, email: str, password: str, role: str = "jobSeeker") -> str:
         user_id = str(uuid4())
         session.execute(
             insert(users).values(
                 id=user_id,
                 email=email,
-                password_hash=hashed_password,
+                password_hash=password,
                 is_active=True,
                 role=role,
             )
@@ -91,9 +91,10 @@ class AuthService:
                 raise HTTPException(status_code=400, detail="User already exists")
             user_id = self.create_user(session, email, hashed_password)
             user = session.execute(select(users).where(users.c.id == user_id)).fetchone()
-
-            access_token = self.helper.generate_jwt_token(user_id, "jobSeeker", user.is_email_verified)
-            return {"access_token": access_token}
+            
+            sanitized_user = {"email": user['email'], "role": user['role'], "is_email_verified": user['is_email_verified'], "user_id": user['id']}
+            tokens = self.helper.generate_jwt_token(sanitized_user)
+            return {"access_token": tokens.access_token}
 
     def login(self, data: dict[str, str]) -> dict[str, str]:
         email, password = data.get('email'), data.get('password')
@@ -110,7 +111,8 @@ class AuthService:
             if not user or not self.helper.is_correct_password(user['password_hash'], password):
                 raise HTTPException(status_code=404, detail="Invalid Email or Password")
 
-            access_token = self.helper.generate_jwt_token(user['id'], user['role'], user['is_email_verified'])
+            sanitized_user = {"email": user['email'], "role": user['role'], "is_email_verified": user['is_email_verified'], "user_id": user['id']}
+            access_token = self.helper.generate_jwt_token(sanitized_user)
             if not access_token:
                 raise HTTPException(status_code=500, detail="Token generation failed")
 
@@ -122,7 +124,7 @@ class AuthService:
     async def generate_and_store_otp(self, email: str) -> dict:
         otp = ''.join(str(random.randint(0, 9)) for _ in range(6))
         try:
-            await redis_client.set(email, otp, ex=900)
+            await redis_client.set(email, otp, ex=1500)
             return otp
         except Exception as e:
             print(e)
@@ -161,7 +163,9 @@ class AuthService:
                 conn.execute(update_stmt)
             
             await redis_client.delete(email)
-            return {"status": "success", "message": "Email is varied"}
+            sanitized_user = {"email": email, "user_id": user['id'], "role": user['role'], "is_email_verified": user['is_email_verified']}
+            tokens = self.helper.generate_jwt_token(sanitized_user)
+            return tokens
 
         except HTTPException:
             raise

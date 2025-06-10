@@ -31,12 +31,10 @@ class Helper:
         return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
     @staticmethod
-    def generate_jwt_token(user_id: str, role: str, is_email_verified: bool, expires_in: int = 3600 * 4) -> str:
+    def generate_jwt_token(user, expires_in: int = 3600 * 4) -> str:
         secret_key = os.getenv("JWT_SECRET", "super-secret-key")
         payload = {
-            "user_id": user_id,
-            "role": role,
-            "is_email_verified": is_email_verified,
+            "user": user,
             "exp": datetime.utcnow() + timedelta(seconds=expires_in)
         }
         return jwt.encode(payload, secret_key, algorithm="HS256")
@@ -45,7 +43,8 @@ class Helper:
         try:
             secret_key = os.getenv("JWT_SECRET", "super-secret-key")
             payload = jwt.decode(token, secret_key, algorithms=["HS256"])
-            user_id: str = payload.get("user_id")  
+            user = payload.get("user")
+            user_id = user.get("user_id") if user else None
             if user_id is None:
                 raise ValueError("Missing user id in token")
             return user_id

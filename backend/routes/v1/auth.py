@@ -44,10 +44,10 @@ async def send_otp(data: SendOtpRequest, auth_service: AuthService = Depends(get
         print("unable to send otp: ", e)
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
-@router.post('/verify-email')
+@router.post('/verify-otp')
 async def email_verification(data: verifyEmailRequest, auth_service: AuthService = Depends(get_auth_service), user_id: str = Depends(Helper().get_current_user_id)):
-    result = await auth_service.verify_email(user_id, data.otp)
-    return result
+    token = await auth_service.verify_email(user_id, data.otp)
+    return token
 
 @router.post('/update-password')
 async def updatePassword(data: forgotPasswordRequest, auth_service: AuthService = Depends(get_auth_service)):

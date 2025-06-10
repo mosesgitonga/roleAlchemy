@@ -1,12 +1,12 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, constr
 
 class RegisterRequest(BaseModel):
     email: EmailStr = Field(..., description="User's email address")
-    password: str = Field(..., min_length=8, description="User's password")
+    password: constr(min_length=8)
 
 class LoginRequest(BaseModel):
     email: EmailStr = Field(..., description="User's email address")
-    password: str = Field(..., min_length=8, description="User's password")
+    password: constr(min_length=8)
 
 class AuthResponse(BaseModel):
     access_token: str 
