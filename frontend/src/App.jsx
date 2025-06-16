@@ -5,8 +5,9 @@ import LandingPage from "./pages/landing.jsx";
 import Login from "./pages/auth/login.jsx";
 import VerifyEmail from "./pages/auth/verifyEmail.jsx";
 import ProtectedRoute from "./components/protectedRoute.jsx";
-import Home from "./pages/home/home.jsx";
+import Homepage from "./pages/home/home.jsx";
 import ForgotPassword from "./pages/auth/forgot-password.jsx";
+import ResumeEditor from "./pages/resume/resume.jsx";
 
 function App() {
   return (
@@ -17,9 +18,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/home" element={<Homepage />} />
+        <Route path="/resume" element={<ResumeEditor />} />
 
         <Route element={<ProtectedRoute />} > 
-          <Route path="/home" element={<Home />} />
+
         </Route>
      
       </Routes>

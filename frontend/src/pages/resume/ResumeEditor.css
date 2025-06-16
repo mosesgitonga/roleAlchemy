@@ -1,0 +1,440 @@
+/* ResumeEditor.css */
+
+/* Custom properties for color scheme and typography */
+:root {
+    --color-bg-primary: #2C2A4A;
+    --color-bg-secondary: #1e1b3a;
+    --color-bg-tertiary: #241f3e;
+    --color-text-primary: #e4dede;
+    --color-text-secondary: #c0b7df;
+    --color-text-highlight: #e63946;
+    --color-text-muted: #aaa2c5;
+    --color-btn-bg: #e63946;
+    --color-btn-bg-hover: #a74950;
+    --color-btn-text: #2C2A4A;
+    --color-btn-text-hover: #fff;
+    --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Reset and base styles */
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    height: 100%;
+    width: 100vw;
+    font-family: var(--font-family-base);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    font-size: 100%;
+  }
+  
+  /* Main container */
+  .min-h-screen {
+    min-height: 100vh;
+    background-color: var(--color-bg-primary);
+    padding: 20px;
+  }
+  
+  /* Header */
+  .text-lg {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-highlight);
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+  }
+  
+  /* Navigation bar */
+  nav {
+    background-color: var(--color-bg-secondary);
+    border-bottom: 1px solid #3f3c5e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: transform 0.3s ease;
+  }
+  
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-highlight);
+    letter-spacing: 2px;
+  }
+  
+  /* Hamburger menu */
+  .nav-toggle {
+    display: none;
+  }
+  
+  .nav-toggle-label {
+    display: none;
+    cursor: pointer;
+    width: 24px;
+    height: 20px;
+    position: relative;
+    z-index: 101;
+  }
+  
+  .nav-toggle-label span,
+  .nav-toggle-label span::before,
+  .nav-toggle-label span::after {
+    background: var(--color-text-primary);
+    height: 3px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-toggle-label span {
+    top: 8px;
+  }
+  
+  .nav-toggle-label span::before {
+    content: '';
+    top: -8px;
+  }
+  
+  .nav-toggle-label span::after {
+    content: '';
+    top: 8px;
+  }
+  
+  .nav-toggle:checked + .nav-toggle-label span {
+    background: transparent;
+  }
+  
+  .nav-toggle:checked + .nav-toggle-label span::before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+  
+  .nav-toggle:checked + .nav-toggle-label span::after {
+    transform: rotate(-45deg);
+    top: 0;
+  }
+  
+  .nav-links {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  
+  .nav-links a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-links a:hover,
+  .nav-links a:focus-visible {
+    color: var(--color-text-highlight);
+    outline: 2px solid var(--color-text-highlight);
+    outline-offset: 3px;
+  }
+  
+  /* Page layout */
+  .page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 40px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  @media (min-width: 1024px) {
+    .page-container {
+      flex-direction: row;
+    }
+  }
+  
+  /* Job description container */
+  .job-description-container {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .job-description-container h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.04em;
+  }
+  
+  .job-description-container textarea {
+    width: 100%;
+    height: 300px;
+    padding: 12px;
+    border: 1px solid #3f3c5e;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-secondary);
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+  }
+  
+  .job-description-container textarea:focus {
+    outline: none;
+    border-color: var(--color-text-highlight);
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+  }
+  
+  /* Resume editor container */
+  .resume-editor-container {
+    flex: 1;
+    background-color: var(--color-bg-tertiary);
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    padding: 24px;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .resume-editor-container:hover,
+  .resume-editor-container:focus-within {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Save button */
+  .save-btn {
+    background-color: var(--color-btn-bg);
+    color: var(--color-btn-text);
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+    margin-top: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .save-btn:hover,
+  .save-btn:focus-visible {
+    background-color: var(--color-btn-bg-hover);
+    color: var(--color-btn-text-hover);
+    outline: none;
+  }
+  
+  /* Loading state */
+  .text-center {
+    text-align: center;
+  }
+  
+  .mt-10 {
+    margin-top: 40px;
+  }
+  
+  .text-gray-600 {
+    color: var(--color-text-muted);
+  }
+  
+  /* TinyMCE editor content styles (for resume content) */
+  .resume-wrapper {
+    font-family: var(--font-family-base);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    color: var(--color-text-primary);
+  }
+  
+  .resume-name {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-text-primary);
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+  
+  .resume-contact {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  
+  .resume-divider {
+    border: 0;
+    border-top: 1px solid #3f3c5e;
+    margin: 20px 0;
+  }
+  
+  .resume-section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-top: 24px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--color-text-highlight);
+    padding-bottom: 4px;
+    letter-spacing: 0.04em;
+  }
+  
+  .resume-paragraph {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin-bottom: 16px;
+  }
+  
+  .resume-role {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .resume-role strong {
+    color: var(--color-text-highlight);
+  }
+  
+  .resume-wrapper ul {
+    list-style-type: disc;
+    margin: 8px 0 16px 20px;
+    padding-left: 20px;
+  }
+  
+  .resume-wrapper li {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+  }
+  
+  .resume-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    list-style-type: none;
+    margin: 8px 0;
+    padding: 0;
+  }
+  
+  .resume-skills li {
+    background-color: var(--color-bg-secondary);
+    padding: 8px 16px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    color: var(--color-text-primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Ensure TinyMCE editor inherits styles */
+  .tox-tinymce {
+    border: 1px solid #3f3c5e;
+    border-radius: 8px;
+    background-color: var(--color-bg-secondary);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .resume-editor-container {
+      width: calc(100% - 32px); 
+      margin: 0 auto;
+      padding: 16px;
+    }
+  
+    .job-description-container {
+      width: calc(100% - 32px); /* Match editor width for consistency */
+      margin: 0 auto;
+    }
+  
+    .job-description-container textarea {
+      height: 200px;
+    }
+  
+    .resume-name {
+      font-size: 1.75rem;
+    }
+  
+    .resume-section-title {
+      font-size: 1.25rem;
+    }
+  
+    .page-container {
+      padding: 20px 16px;
+    }
+  
+    /* Hamburger menu for small screens */
+    .nav-toggle-label {
+      display: block;
+    }
+  
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      background-color: var(--color-bg-secondary);
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      padding: 16px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+  
+    .nav-toggle:checked ~ .nav-links {
+      display: flex;
+    }
+  
+    .nav-links a {
+      font-size: 1rem;
+      text-align: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .save-btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+  
+    .text-lg {
+      font-size: 1.25rem;
+    }
+  
+    .logo {
+      font-size: 1.25rem;
+    }
+  
+    nav {
+      padding: 12px 16px;
+    }
+  
+    .resume-editor-container,
+    .job-description-container {
+      width: calc(90vw - 1px); /* Slightly tighter margins for very small screens */
+    }
+  }

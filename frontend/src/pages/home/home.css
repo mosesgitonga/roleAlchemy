@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: #1e1b4b; /* dark indigo */
+    color: #fff;
+  }
+  
+  .resume-builder {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  .left-panel, .right-panel {
+    flex: 1;
+    background: #2e2664;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  h2 {
+    margin-bottom: 1rem;
+    color: #ff3366;
+  }
+  
+  textarea {
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+    background: #1c193c;
+    color: #f0f0f0;
+    border: 1px solid #888;
+    border-radius: 8px;
+    resize: vertical;
+    font-size: 1rem;
+  }
+  
+  button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.25rem;
+    background: #ff3366;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background: #e82e5c;
+  }
+  
+  .resume-content {
+    background: #1c193c;
+    padding: 1rem;
+    border: 1px dashed #aaa;
+    border-radius: 8px;
+    min-height: 400px;
+    overflow-y: auto;
+    color: #fff;
+  }
+  
+  .download-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+  }
+  
+  
