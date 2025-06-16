@@ -61,13 +61,14 @@ export default function ResumeEditor() {
                     <Editor
                         onInit={(evt, editor) => (editorRef.current = editor)}
                         initialValue={initialContent}
-                        apiKey="cj8t272knqraariwd6exq9sf5lg8e37kg29zyazvhj6ahm0i"
+                        apiKey ={`${import.meta.env.VITE_TINYMCE_API_KEY}`}
                         init={{
+                            
                             height: 1050,
                             menubar: false,
                             plugins: ["lists", "link", "table", "autolink", "paste", "wordcount"],
                             toolbar: "undo redo | bold italic underline | bullist numlist | link table",
-                            content_css: "/resume-styles.css",
+                            content_css: "/",
                         }}
                     />
                     <div className="text-center">
