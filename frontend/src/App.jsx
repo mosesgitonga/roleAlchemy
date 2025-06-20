@@ -7,7 +7,8 @@ import VerifyEmail from "./pages/auth/verifyEmail.jsx";
 import ProtectedRoute from "./components/protectedRoute.jsx";
 import Homepage from "./pages/home/home.jsx";
 import ForgotPassword from "./pages/auth/forgot-password.jsx";
-import ResumeEditor from "./pages/resume/resume.jsx";
+import ResumeBuilder from "./pages/resume/resume.jsx";
+import ProfileCreationForm from "./pages/profileForm.jsx";
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/home" element={<Homepage />} />
-        <Route path="/resume" element={<ResumeEditor />} />
+        <Route path="/resume" element={<ResumeBuilder />} />
+        <Route path="/profile-form" element={<ProfileCreationForm />} />
 
         <Route element={<ProtectedRoute />} > 
 

@@ -50,7 +50,8 @@ profiles = Table(
 projects = Table(
     "projects", metadata,
     Column("id", String, primary_key=True),
-    Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id", ondelete="CASCADE"), nullable=False),    Column("title",String, nullable=False),
+    Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id", ondelete="CASCADE"), nullable=False),
+    Column("title",String, nullable=True),
     Column("description", String, nullable=True),
     Column("link", String, nullable=True),
 
@@ -61,7 +62,7 @@ skills = Table(
     metadata,
     Column("id", String, primary_key=True),
     Column("profile_id", String, ForeignKey(f"{SCHEMA_NAME}.profiles.id")),
-    Column("skill_name", String, nullable=False),
+    Column("skill_name", String, nullable=True)
 )
 
 experience = Table(

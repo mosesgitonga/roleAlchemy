@@ -90,11 +90,21 @@ class AuthService:
             if self.user_exists_by_email(session, email):
                 raise HTTPException(status_code=400, detail="User already exists")
             user_id = self.create_user(session, email, hashed_password)
-            user = session.execute(select(users).where(users.c.id == user_id)).fetchone()
-            
-            sanitized_user = {"email": user['email'], "role": user['role'], "is_email_verified": user['is_email_verified'], "user_id": user['id']}
+
+            user = session.execute(
+                select(users).where(users.c.id == user_id)
+            ).mappings().fetchone()  
+
+            sanitized_user = {
+                "email": user['email'],
+                "role": user['role'],
+                "is_email_verified": user['is_email_verified'],
+                "user_id": user['id']
+            }
+
             tokens = self.helper.generate_jwt_token(sanitized_user)
-            return {"access_token": tokens.access_token}
+            print(tokens)
+            return {"access_token": tokens}
 
     def login(self, data: dict[str, str]) -> dict[str, str]:
         email, password = data.get('email'), data.get('password')

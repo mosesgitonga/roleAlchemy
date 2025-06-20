@@ -72,17 +72,16 @@ class AchievementUpdate(BaseModel):
     description: Optional[str] = None
     achieved_at: Optional[datetime] = None 
 class ProfileCreate(BaseModel):
-    user_id: str
     full_name: Optional[str] = None
     linkedin: Optional[str] = None
     github: Optional[str] = None
-    website: Optional[str] = None
+    website: Optional[str] = None 
     phone: Optional[str] = None
     country: Optional[str] = None
     city: Optional[str] = None
     projects: Optional[List[Dict[str, Any]]] = Field(default_factory=list)
     skills: Optional[List[str]] = Field(default_factory=list)
-    experience: List[ExperienceCreate] = Field(default_factory=list)
-    education: List[EducationCreate] = Field(default_factory=list)
-    certifications: List[CertificationCreate] = Field(default_factory=list)
-    achievements: List[AchievementCreate] = Field(default_factory=list)
+    experience: Optional[List[ExperienceCreate]] = Field(default_factory=list)
+    education: Optional[List[EducationCreate]] = Field(default_factory=list)
+    certifications: Optional[List[CertificationCreate]] = Field(default_factory=list)
+    achievements: Optional[List[AchievementCreate]] = Field(default_factory=list)

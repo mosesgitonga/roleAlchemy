@@ -57,33 +57,59 @@ class Profile:
     def create(self, data: dict, user_id: str):
         if not user_id:
             raise HTTPException(400, "user_id is required")
-        
+
+        if not data.get("full_name"):
+            raise HTTPException(400, "Full name is required")
+
         self._validate_user(user_id)
         self._validate_unique_profile(user_id)
-        self._validate_urls(data.get("linkedin"), data.get("github"), data.get("website"))
-        self._validate_phone(data.get("phone"))
+
+        # Validate only if value is present (None-safe)
+        self._validate_urls(
+            data.get("linkedin") or "", 
+            data.get("github") or "", 
+            data.get("website") or ""
+        )
+        self._validate_phone(data.get("phone") or "")
 
         profile_id = str(uuid4())
+        
         try:
             with self.engine.begin() as conn:
+                # Safely insert profile with fallbacks for optional fields
                 conn.execute(insert(profiles).values(
-                    id=profile_id, user_id=user_id, full_name=data.get("full_name"),
-                    linkedin=data.get("linkedin"), github=data.get("github"),
-                    website=data.get("website"), phone=data.get("phone"),
-                    country=data.get("country"), city=data.get("city"),
+                    id=profile_id,
+                    user_id=user_id,
+                    full_name=data["full_name"],
+                    linkedin=data.get("linkedin"),
+                    github=data.get("github"),
+                    website=data.get("website"),
+                    phone=data.get("phone"),
+                    country=data.get("country"),
+                    city=data.get("city"),
                     updated_at=datetime.utcnow()
                 ))
+
+                # Safely insert nested data only if list is non-empty
                 for field, parser in self.insert_map.items():
-                    for item in data.get(field, []):
-                        if item:
-                            conn.execute(insert(self.tables[field]).values(
-                                id=str(uuid4()), profile_id=profile_id, **parser(item)
-                            ))
+                    items = data.get(field) or []
+                    for item in items:
+                        if item:  # Skip empty dicts or nulls
+                            parsed = parser(item)
+                            conn.execute(
+                                insert(self.tables[field]).values(
+                                    id=str(uuid4()),
+                                    profile_id=profile_id,
+                                    **parsed
+                                )
+                            )
                 logger.info(f"Profile created: {profile_id}")
                 return {"id": profile_id, "message": "Profile created"}
+        
         except Exception as e:
             logger.error(f"Profile creation failed: {str(e)}")
             raise HTTPException(500, "Failed to create profile")
+
 
     def read(self, profile_id: str):
         try:
