@@ -3,7 +3,7 @@
 body, html {
   margin: 0;
   padding: 0;
-  font-family: 'Orbitron', sans-serif;
+  font-family:  sans-serif;
   background-color: #ffffff;
 }
 
@@ -65,7 +65,7 @@ body, html {
   font-size: 1rem;
   font-weight: bold;
   color: #fff;
-  background-color: #e63946;
+  background-color: #5ce639;
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -73,7 +73,7 @@ body, html {
 }
 
 .login-form button:hover {
-  background-color: #d62839;
+  background-color: #51d628;
 }
 
 .register-link {

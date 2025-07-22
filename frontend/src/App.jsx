@@ -19,9 +19,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/home" element={<Homepage />} />
-        <Route path="/resume" element={<ResumeBuilder />} />
-        <Route path="/profile-form" element={<ProfileCreationForm />} />
+        {/* <Route path="/home" element={<Homepage />} /> */}
+        {/* <Route path="/resume" element={<ResumeBuilder />} /> */}
+        {/* <Route path="/profile-form" element={<ProfileCreationForm />} /> */}
 
         <Route element={<ProtectedRoute />} > 
 
