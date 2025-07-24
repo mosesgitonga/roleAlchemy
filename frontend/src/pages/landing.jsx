@@ -13,7 +13,7 @@ export default function LandingPage() {
             <a href="#how-it-works">How It Works</a>
             <a href="#testimonials">Testimonials</a>
             <a href="#faqs">FAQs</a>
-            <a href="#get-started"  id='btn-primary' className="btn-primary">Get Started</a>
+            <a href="/register"  id='btn-primary' className="btn-primary">Get Started</a>
           </nav>
         </div>
       </header>
@@ -28,7 +28,7 @@ export default function LandingPage() {
               Paste a job description and get a high-converting, ATS-optimized
               resume & cover letter built just for that role — in seconds.
             </p>
-            <a href="#get-started" className="btn-primary large">Start in Seconds</a>
+            <a href="/register" className="btn-primary large">Start in Seconds</a>
           </div>
           <div className="hero-visual" aria-hidden="true">
             <img
@@ -150,14 +150,14 @@ export default function LandingPage() {
         <div className="container cta-container">
           <h3>Pretty Doesn’t Get You Hired. Strategy Does.</h3>
           <p>Build resumes that recruiters and AI both love. Role Alchemy makes it automatic.</p>
-          <a href="#" className="btn-primary large">Get Started Now</a>
+          <a href="/register" className="btn-primary large">Get Started Now</a>
         </div>
       </section>
 
       {/* FOOTER */}
       <footer className="footer">
         <div className="container footer-container">
-          <p>© 2025 Role Alchemy. All rights reserved.</p>
+          <p>© 2025 Anunnaki.roleAlchemy. All rights reserved.</p>
           <nav className="footer-nav">
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Service</a>
