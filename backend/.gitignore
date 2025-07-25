@@ -3,3 +3,11 @@ app.log
 __pycache__
 alembic
 alembic.ini
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+*.db
+alembic/versions/*
+logs/

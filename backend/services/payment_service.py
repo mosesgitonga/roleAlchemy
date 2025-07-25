@@ -6,7 +6,7 @@ PRICING = {
     "NGN": {"daily": 200, "weekly": 1000, "monthly": 2000},  
     "GHS": {"daily": 2, "weekly": 10, "monthly": 20},      
     "ZAR": {"daily": 5, "weekly": 25, "monthly": 50},       
-    "USD": {"daily": 1, "weekly": 4, "monthly": 8}           
+    "USD": {"daily": 2, "weekly": 7, "monthly": 12}           
 }
 CURRENCIES_NO_MULTIPLY = {"JPY", "KRW", "CLP"}
 
